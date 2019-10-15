@@ -275,9 +275,14 @@ export default class StudentsHttpClient {
      * @param {Map<string, TableFilter>} tableFilters  the filters to apply to the students
      */
     static filterStudents(student, tableFilters) {
-        for (const [field, filter] of tableFilters) {
+        // For some reason StackBlitz didn't like the following for loop so I changed it to use Array.from:
+        //
+        //      for (const [field, filter] of tableFilters)
+        //
+        const filters = Array.from(tableFilters.values());
+        for (const filter of filters) {
             let testValue;
-            switch (field) {
+            switch (filter.field) {
                 case 'studentSchoolId':
                     testValue = student.studentSchoolId;
                     break;
