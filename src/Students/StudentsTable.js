@@ -144,9 +144,13 @@ export default class StudentsTable extends React.Component {
 
         let newTableFilters = new Map(this.state.tableFilters);
         newTableFilters.set(this.state.filterColumn, filter);
-        this.setState({ isTableFilterTextDialogOpen: false, tableFilters: newTableFilters, filterColumn: null });
 
-        this.retrieveStudents(this.state.sortColumn, this.state.sortOrder, this.state.page, this.state.rowsPerPage, newTableFilters);
+        // We set the page to 0 since the user may be on a page that will no longer exist after the filter is applied.
+        const newPage = 0;
+
+        this.setState({ isTableFilterTextDialogOpen: false, tableFilters: newTableFilters, filterColumn: null, page: newPage });
+
+        this.retrieveStudents(this.state.sortColumn, this.state.sortOrder, newPage, this.state.rowsPerPage, newTableFilters);
     }
 
     /**
@@ -335,8 +339,13 @@ export default class StudentsTable extends React.Component {
                     // Set the table as not loading and display the error
                     this.setState({ isLoading: false, isAlertDialogOpen: true, alertDialogTitle: 'Error', alertDialogMsg: response.error });
                 } else {
+                    
+                    // We set the page to 0 since the user may be on a page that will no longer exist after the students are deleted
+                    const newPage = 0;
+                    this.setState({ page: newPage });
+
                     // Retrieve students to refresh the table with the deleted students removed
-                    this.retrieveStudents(this.state.sortColumn, this.state.sortOrder, this.state.page, this.state.rowsPerPage, this.state.tableFilters);
+                    this.retrieveStudents(this.state.sortColumn, this.state.sortOrder, newPage, this.state.rowsPerPage, this.state.tableFilters);
                 }
             })
     }
