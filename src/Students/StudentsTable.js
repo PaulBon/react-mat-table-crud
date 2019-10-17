@@ -20,9 +20,9 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
 import StudentsHttpClient from './StudentsHttpClient';
-import AlertDialog from './AlertDialog';
-import ConfirmDialog from './ConfirmDialog';
-import TableFilterTextDialog from './TableFilterTextDialog';
+import AlertDialog from '../Dialogs/AlertDialog';
+import ConfirmDialog from '../Dialogs/ConfirmDialog';
+import TableFilterTextDialog from '../TableFilters/TableFilterTextDialog';
 import TableFilter from './TableFilter';
 import StudentDetailTable from './StudentDetailTable';
 import './StudentsTable.css'
