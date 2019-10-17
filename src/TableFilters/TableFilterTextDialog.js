@@ -13,11 +13,21 @@ export default class TableFilterTextDialog extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = { operator: this.props.operator, value: this.props.value };
+        this.state = { operator: 'Is equal to', value: '' };
 
         // Bind 'this' to the following methods so they can access 'this'
         this.handleOperatorChange = this.handleOperatorChange.bind(this);
         this.handleValueChange = this.handleValueChange.bind(this);
+    }
+
+    /**
+     * Called before this dialog is opened to set the filter operator and value.
+     *
+     * @param {string} op the filter operator
+     * @param {string} val the filter value
+     */
+    setOperatorAndValue(op, val) {
+        this.setState({ operator: op, value: val });
     }
 
     /**
@@ -42,7 +52,7 @@ export default class TableFilterTextDialog extends React.Component {
      * Generates the content for the Filter Dialog.
      */
     render() {
-        return (
+        return ( 
             <Dialog
                 open={this.props.open}
                 onClose={() => this.props.handleClose()}

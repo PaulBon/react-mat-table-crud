@@ -38,6 +38,9 @@ export default class StudentsTable extends React.Component {
             isAlertDialogOpen: false, alertDialogTitle: '', alertDialogMsg: '', deleteStudentId: -1, isTableFilterTextDialogOpen: false, tableFilters: new Map(), filterColumn: null, expandedStudents: new Set()
         };
 
+        // Create a reference for the TableFilterTextDialog element
+        this.filterDialogElement = React.createRef();
+
         // Bind 'this' to the following methods so they can access 'this'
         this.renderDisplayStudentRow = this.renderDisplayStudentRow.bind(this);
         this.renderEditStudentRow = this.renderEditStudentRow.bind(this);
@@ -158,22 +161,22 @@ export default class StudentsTable extends React.Component {
     }
 
     /**
-     * Returns the current filter operator for the column being displayed in the filter dialog.
+     * Returns the current filter operator for the column that will be displayed in the filter dialog.
      */
-    getFilterOperator() {
-        if (this.state.tableFilters.has(this.state.filterColumn)) {
-            return this.state.tableFilters.get(this.state.filterColumn).operator;
+    getFilterOperator(filterColumn) {
+        if (this.state.tableFilters.has(filterColumn)) {
+            return this.state.tableFilters.get(filterColumn).operator;
         }
 
         return 'Is equal to';
     }
 
     /**
-     * Returns the current filter value for the column being displayed in the filter dialog.
+     * Returns the current filter value for the column that will be displayed in the filter dialog.
      */
-    getFilterValue() {
-        if (this.state.tableFilters.has(this.state.filterColumn)) {
-            return this.state.tableFilters.get(this.state.filterColumn).value;
+    getFilterValue(filterColumn) {
+        if (this.state.tableFilters.has(filterColumn)) {
+            return this.state.tableFilters.get(filterColumn).value;
         }
 
         return '';
@@ -542,6 +545,11 @@ export default class StudentsTable extends React.Component {
      * @param {string} column the column to filter
      */
     handleFilterClick(column) {
+
+        // Set the filter dialog's operator and value to the values for this column before opening it
+        this.filterDialogElement.current.setOperatorAndValue(this.getFilterOperator(column), this.getFilterValue(column));
+
+        // Open the filter dialog
         this.setState({ isTableFilterTextDialogOpen: true, filterColumn: column });
     }
 
@@ -700,7 +708,7 @@ export default class StudentsTable extends React.Component {
 
                 <AlertDialog open={this.state.isAlertDialogOpen} handleClose={this.handleAlertDialogClose} title={this.state.alertDialogTitle} message={this.state.alertDialogMsg} />
                 <ConfirmDialog open={this.state.isConfirmDialogOpen} handleClose={this.handleConfirmDialogClose} handleConfirm={this.state.handleConfirm} title='Delete' message={this.state.confirmDialgMsg} />
-                <TableFilterTextDialog open={this.state.isTableFilterTextDialogOpen} handleClose={this.handleTableFilterTextDialogClose} handleFilter={this.handleFilter} handleFilterClear={this.handleFilterClear} operator={this.getFilterOperator()} value={this.getFilterValue()} />
+                <TableFilterTextDialog ref={this.filterDialogElement} open={this.state.isTableFilterTextDialogOpen} handleClose={this.handleTableFilterTextDialogClose} handleFilter={this.handleFilter} handleFilterClear={this.handleFilterClear} />
             </div>
         )
     }
